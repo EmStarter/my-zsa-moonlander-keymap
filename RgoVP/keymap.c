@@ -12,12 +12,12 @@ enum custom_keycodes {
 
 
 
-#define DUAL_FUNC_0 LT(5, KC_F7)
-#define DUAL_FUNC_1 LT(6, KC_F16)
-#define DUAL_FUNC_2 LT(10, KC_F3)
-#define DUAL_FUNC_3 LT(13, KC_P)
-#define DUAL_FUNC_4 LT(8, KC_F21)
-#define DUAL_FUNC_5 LT(9, KC_G)
+#define DUAL_FUNC_0 LT(10, KC_F16)
+#define DUAL_FUNC_1 LT(14, KC_F4)
+#define DUAL_FUNC_2 LT(8, KC_F15)
+#define DUAL_FUNC_3 LT(1, KC_F24)
+#define DUAL_FUNC_4 LT(5, KC_2)
+#define DUAL_FUNC_5 LT(9, KC_H)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
@@ -78,11 +78,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 
+const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM = LAYOUT(
+  'L', 'L', 'L', 'L', 'L', 'L', 'L', 'R', 'R', 'R', 'R', 'R', 'R', 'R',
+  'L', 'L', 'L', 'L', 'L', 'L', 'L', 'R', 'R', 'R', 'R', 'R', 'R', 'R',
+  'L', 'L', 'L', 'L', 'L', 'L', 'L', 'R', 'R', 'R', 'R', 'R', 'R', 'R',
+  'L', 'L', 'L', 'L', 'L', 'L', 'R', 'R', 'R', 'R', 'R', 'R',
+  'L', 'L', 'L', 'L', 'L', '*', '*', 'R', 'R', 'R', 'R', 'R',
+                 '*', '*', '*', '*', '*', '*'
+);
 
 const uint16_t PROGMEM combo0[] = { LT(3, KC_T), LT(1, KC_SPACE), COMBO_END};
 const uint16_t PROGMEM combo1[] = { MT(MOD_RALT, KC_P), KC_C, COMBO_END};
 const uint16_t PROGMEM combo2[] = { MT(MOD_RSFT, KC_W), MT(MOD_LSFT, KC_H), COMBO_END};
-const uint16_t PROGMEM combo3[] = { MT(MOD_LCTL, KC_E), MT(MOD_LALT, KC_I), COMBO_END};
+const uint16_t PROGMEM combo3[] = { KC_DQUO, MT(MOD_RALT, KC_QUOTE), COMBO_END};
 const uint16_t PROGMEM combo4[] = { MT(MOD_LCTL, KC_E), MT(MOD_LGUI, KC_A), COMBO_END};
 const uint16_t PROGMEM combo5[] = { MT(MOD_RCTL, KC_R), MT(MOD_RGUI, KC_S), COMBO_END};
 const uint16_t PROGMEM combo6[] = { KC_F, KC_L, COMBO_END};
