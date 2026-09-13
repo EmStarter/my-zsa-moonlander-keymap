@@ -1,3 +1,4 @@
+#define CHORDAL_HOLD
 #undef TAPPING_TERM
 #define TAPPING_TERM 190
 
@@ -32,7 +33,7 @@
 #undef MOUSEKEY_WHEEL_TIME_TO_MAX
 #define MOUSEKEY_WHEEL_TIME_TO_MAX 30
 
-#define SERIAL_NUMBER "RgoVP/Kre0z7"
+#define SERIAL_NUMBER "RgoVP/Yn3EPw"
 #define LAYER_STATE_8BIT
 #define COMBO_COUNT 7
 
