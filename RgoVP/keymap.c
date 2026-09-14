@@ -12,13 +12,13 @@ enum custom_keycodes {
 
 
 
-#define DUAL_FUNC_0 LT(6, KC_F4)
-#define DUAL_FUNC_1 LT(7, KC_F12)
-#define DUAL_FUNC_2 LT(7, KC_H)
-#define DUAL_FUNC_3 LT(14, KC_U)
-#define DUAL_FUNC_4 LT(11, KC_I)
-#define DUAL_FUNC_5 LT(7, KC_L)
-#define DUAL_FUNC_6 LT(12, KC_E)
+#define DUAL_FUNC_0 LT(15, KC_J)
+#define DUAL_FUNC_1 LT(4, KC_Q)
+#define DUAL_FUNC_2 LT(13, KC_F6)
+#define DUAL_FUNC_3 LT(13, KC_F2)
+#define DUAL_FUNC_4 LT(8, KC_B)
+#define DUAL_FUNC_5 LT(13, KC_F14)
+#define DUAL_FUNC_6 LT(9, KC_L)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
@@ -31,7 +31,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [1] = LAYOUT_moonlander(
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_ESCAPE,      KC_CAPS,        KC_NO,          KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_PC_CUT,      KC_PC_PASTE,    KC_PC_COPY,     KC_PC_UNDO,     KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_NO,          KC_ESCAPE,      KC_CAPS,        KC_NO,          KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_PC_CUT,      KC_PC_PASTE,    KC_PC_COPY,     KC_PC_UNDO,     KC_TRANSPARENT, KC_TRANSPARENT, 
     KC_TRANSPARENT, KC_NO,          KC_LEFT_ALT,    KC_LEFT_CTRL,   KC_LEFT_GUI,    KC_NO,          KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       KC_NO,          KC_TRANSPARENT,
     KC_TRANSPARENT, KC_LEFT_SHIFT,  KC_RIGHT_ALT,   KC_NO,          KC_NO,          KC_NO,                                          KC_NO,          KC_PGDN,        KC_PAGE_UP,     KC_NO,          TO(2),          KC_TRANSPARENT,
     KC_TRANSPARENT, KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_NO,          KC_TRANSPARENT,
@@ -95,6 +95,8 @@ const uint16_t PROGMEM combo3[] = { KC_DQUO, MT(MOD_RALT, KC_QUOTE), COMBO_END};
 const uint16_t PROGMEM combo4[] = { MT(MOD_LCTL, KC_E), MT(MOD_LGUI, KC_A), COMBO_END};
 const uint16_t PROGMEM combo5[] = { MT(MOD_RCTL, KC_R), MT(MOD_RGUI, KC_S), COMBO_END};
 const uint16_t PROGMEM combo6[] = { KC_F, KC_L, COMBO_END};
+const uint16_t PROGMEM combo7[] = { KC_DOT, MT(MOD_LSFT, KC_H), COMBO_END};
+const uint16_t PROGMEM combo8[] = { MT(MOD_RGUI, KC_S), MT(MOD_RSFT, KC_W), COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo0, OSL(5)),
@@ -104,6 +106,8 @@ combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo4, KC_ESCAPE),
     COMBO(combo5, KC_BSPC),
     COMBO(combo6, KC_DELETE),
+    COMBO(combo7, OSM(MOD_HYPR)),
+    COMBO(combo8, OSM(MOD_MEH)),
 };
 
 
