@@ -1,2 +1,6 @@
 .idea
 *.iml
+
+# keymap-viz generated artifacts
+keymap-viz/keymap.yaml
+__pycache__/
