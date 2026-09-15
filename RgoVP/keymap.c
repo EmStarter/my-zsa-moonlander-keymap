@@ -12,14 +12,14 @@ enum custom_keycodes {
 
 
 
-#define DUAL_FUNC_0 LT(9, KC_F19)
-#define DUAL_FUNC_1 LT(13, KC_Q)
-#define DUAL_FUNC_2 LT(14, KC_F20)
-#define DUAL_FUNC_3 LT(10, KC_F9)
-#define DUAL_FUNC_4 LT(12, KC_U)
-#define DUAL_FUNC_5 LT(11, KC_F3)
-#define DUAL_FUNC_6 LT(2, KC_N)
-#define DUAL_FUNC_7 LT(8, KC_D)
+#define DUAL_FUNC_0 LT(10, KC_J)
+#define DUAL_FUNC_1 LT(8, KC_F15)
+#define DUAL_FUNC_2 LT(7, KC_F24)
+#define DUAL_FUNC_3 LT(12, KC_S)
+#define DUAL_FUNC_4 LT(1, KC_F11)
+#define DUAL_FUNC_5 LT(14, KC_V)
+#define DUAL_FUNC_6 LT(2, KC_R)
+#define DUAL_FUNC_7 LT(6, KC_F4)
 // Left thumb: tap = Repeat Key, hold = layer 2 (Tab still available via combo3).
 // KC_F13 is a throwaway placeholder; the tap is intercepted in process_record_user.
 #define REP_L2 LT(2, KC_F13)
@@ -37,7 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_NO,          KC_ESCAPE,      KC_CAPS,        KC_NO,          KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_PC_CUT,      KC_PC_PASTE,    KC_PC_COPY,     KC_PC_UNDO,     KC_TRANSPARENT, KC_TRANSPARENT, 
     KC_TRANSPARENT, KC_NO,          KC_LEFT_ALT,    KC_LEFT_CTRL,   KC_LEFT_GUI,    KC_NO,          KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       KC_NO,          KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_LEFT_SHIFT,  KC_RIGHT_ALT,   KC_NO,          KC_NO,          KC_NO,                                          KC_NO,          KC_PGDN,        KC_PAGE_UP,     KC_NO,          TO(2),          KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_LEFT_SHIFT,  KC_RIGHT_ALT,   KC_NO,          KC_NO,          KC_NO,                                          KC_NO,          KC_PGDN,        KC_PAGE_UP,     KC_NO,          KC_NO,          KC_TRANSPARENT,
     KC_TRANSPARENT, KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_NO,          KC_TRANSPARENT,
     KC_TRANSPARENT, KC_NO,          KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TAB,         KC_ENTER
   ),
@@ -99,8 +99,8 @@ const uint16_t PROGMEM combo3[] = { KC_DQUO, MT(MOD_RALT, KC_QUOTE), COMBO_END};
 const uint16_t PROGMEM combo4[] = { MT(MOD_LCTL, KC_E), MT(MOD_LGUI, KC_A), COMBO_END};
 const uint16_t PROGMEM combo5[] = { MT(MOD_RCTL, KC_R), MT(MOD_RGUI, KC_S), COMBO_END};
 const uint16_t PROGMEM combo6[] = { KC_F, KC_L, COMBO_END};
-const uint16_t PROGMEM combo7[] = { MT(MOD_LSFT, KC_H), MT(MOD_LGUI, KC_A), COMBO_END};
-const uint16_t PROGMEM combo8[] = { MT(MOD_RGUI, KC_S), MT(MOD_RSFT, KC_W), COMBO_END};
+const uint16_t PROGMEM combo7[] = { MT(MOD_LSFT, KC_H), KC_DOT, COMBO_END};
+const uint16_t PROGMEM combo8[] = { MT(MOD_RSFT, KC_W), KC_M, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo0, OSL(5)),
