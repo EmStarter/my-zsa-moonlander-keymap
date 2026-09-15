@@ -20,6 +20,9 @@ enum custom_keycodes {
 #define DUAL_FUNC_5 LT(11, KC_F3)
 #define DUAL_FUNC_6 LT(2, KC_N)
 #define DUAL_FUNC_7 LT(8, KC_D)
+// Left thumb: tap = Repeat Key, hold = layer 2 (Tab still available via combo3).
+// KC_F13 is a throwaway placeholder; the tap is intercepted in process_record_user.
+#define REP_L2 LT(2, KC_F13)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
@@ -28,7 +31,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRANSPARENT, KC_Q,           MT(MOD_LALT, KC_I),MT(MOD_LCTL, KC_E),MT(MOD_LGUI, KC_A),KC_DOT,         KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_M,           MT(MOD_RGUI, KC_S),MT(MOD_RCTL, KC_R),MT(MOD_LALT, KC_N),KC_B,           KC_TRANSPARENT,
     KC_TRANSPARENT, MT(MOD_LSFT, KC_H),MT(MOD_RALT, KC_QUOTE),KC_DQUO,        KC_COMMA,       KC_SLASH,                                       KC_V,           KC_K,           KC_C,           MT(MOD_RALT, KC_P),MT(MOD_RSFT, KC_W),KC_TRANSPARENT,
     KC_TRANSPARENT, LT(6, KC_J),    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_Z,           KC_TRANSPARENT, 
-    LT(1, KC_SPACE),LT(2, KC_TAB),  KC_TRANSPARENT,                 KC_TRANSPARENT, LT(4, KC_BSPC), LT(3, KC_T)
+    LT(1, KC_SPACE),REP_L2,         KC_TRANSPARENT,                 KC_TRANSPARENT, LT(4, KC_BSPC), LT(3, KC_T)
   ),
   [1] = LAYOUT_moonlander(
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
@@ -256,6 +259,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       return false;
+    case REP_L2:
+      if (record->tap.count > 0) {          // tapped -> Repeat Key
+        repeat_key_invoke(&record->event);
+        return false;
+      }
+      return true;                          // held -> let LT activate layer 2
     case RGB_SLD:
         if (rawhid_state.rgb_control) {
             return false;
