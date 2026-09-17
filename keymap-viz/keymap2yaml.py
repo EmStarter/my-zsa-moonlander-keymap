@@ -179,16 +179,108 @@ def parse_combos(text, base_tokens):
     return combos
 
 
+# --- key classification (drives per-key colour via CSS class) --------------
+
+NAV = {"KC_LEFT", "KC_RIGHT", "KC_UP", "KC_DOWN", "KC_PGDN", "KC_PAGE_UP",
+       "KC_HOME", "KC_END"}
+MODS = {"KC_LEFT_ALT", "KC_LEFT_CTRL", "KC_LEFT_GUI", "KC_LEFT_SHIFT",
+        "KC_RIGHT_ALT", "KC_RIGHT_GUI", "KC_RIGHT_SHIFT", "KC_RIGHT_CTRL"}
+FUNC = {"KC_SPACE", "KC_ENTER", "KC_TAB", "KC_ESCAPE", "KC_BSPC", "KC_DELETE",
+        "KC_CAPS"}
+SYS_PREFIX = ("KC_AUDIO_", "KC_MEDIA_", "RGB_", "KC_MS_", "KC_PC_")
+SYS = {"AU_TOGG", "QK_BOOT", "CW_TOGG", "RGB_SLD", "RGB_TOG",
+       "RGB_MODE_FORWARD"}
+
+# every symbol/punctuation keycode that appears in this keymap
+SYMS = {
+    "KC_DOT", "KC_COMMA", "KC_SLASH", "KC_DQUO", "KC_QUOTE", "KC_SCLN",
+    "KC_RABK", "KC_LABK", "KC_EQUAL", "KC_BSLS", "KC_MINUS", "KC_GRAVE",
+    "KC_CIRC", "KC_PERC", "KC_DLR", "KC_RBRC", "KC_LBRC", "KC_PLUS",
+    "KC_ASTR", "KC_AMPR", "KC_PIPE", "KC_TILD", "KC_RCBR", "KC_LCBR",
+    "KC_UNDS", "KC_RPRN", "KC_LPRN", "KC_HASH", "KC_AT", "KC_EXLM",
+    "KC_COLN", "KC_KP_PLUS", "KC_KP_COMMA", "KC_KP_DOT", "KC_KP_ASTERISK",
+    "KC_KP_SLASH",
+}
+
+
+def classify_scalar(t):
+    if re.match(r"^KC_[A-Z]$", t):
+        return "alpha"
+    if re.match(r"^KC_[0-9]$", t) or re.match(r"^KC_KP_[0-9]$", t):
+        return "num"
+    if re.match(r"^KC_F[0-9]+$", t):
+        return "func"
+    if t in NAV:
+        return "nav"
+    if t in MODS:
+        return "mod"
+    if t in FUNC:
+        return "func"
+    if t in SYS or t.startswith(SYS_PREFIX):
+        return "sys"
+    if t in SYMS:
+        return "sym"
+    return None
+
+
+def classify(tok):
+    if tok in ("KC_TRANSPARENT", "KC_NO"):
+        return "trans"
+    if tok == "REP_L2":
+        return "layer"
+    if tok.startswith("DUAL_FUNC_"):
+        return "sym"
+    if tok.startswith("MT(") or tok.startswith("OSM("):
+        return "mod"
+    if re.match(r"^(LT|MO|TO|TG|OSL|DF|TT)\(", tok):
+        return "layer"
+    m = re.match(r"^[LR](ALT|CTL|GUI|SFT)\((.+)\)$", tok)
+    if m:
+        return classify_scalar(m.group(2))
+    return classify_scalar(tok)
+
+
+# category -> fill colour
+PALETTE = {
+    "alpha": "#eef1f5",
+    "num":   "#fff2cc",
+    "sym":   "#e7d9f6",
+    "mod":   "#ffdede",
+    "layer": "#d9edd9",
+    "nav":   "#d3eef6",
+    "sys":   "#ffe3c7",
+    "func":  "#e1e8ef",
+    "trans": "#fbfcfd",
+}
+
+
+def draw_config_block():
+    css = ["/* per-category key colours */"]
+    for cls, fill in PALETTE.items():
+        css.append("rect.%s { fill: %s; }" % (cls, fill))
+    css.append("rect.combo { fill: #cfe3ff; }")
+    out = ["draw_config:", "  svg_extra_style: |"]
+    out += ["    " + line for line in css]
+    return out
+
+
 # --- YAML emit (hand-rolled, no pyyaml dependency) -------------------------
 
 def q(s):
     return '"' + str(s).replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
-def emit_key(k):
-    if isinstance(k, dict):
-        return "{t: %s, h: %s}" % (q(k["t"]), q(k["h"]))
-    return q(k)
+def emit_key(tok):
+    lbl = label(tok)
+    typ = classify(tok)
+    if isinstance(lbl, dict):
+        parts = ["t: %s" % q(lbl["t"]), "h: %s" % q(lbl["h"])]
+        if typ:
+            parts.append("type: %s" % q(typ))
+        return "{%s}" % ", ".join(parts)
+    if typ:
+        return "{t: %s, type: %s}" % (q(lbl), q(typ))
+    return q(lbl)
 
 
 def main():
@@ -206,13 +298,14 @@ def main():
     for name in order:
         lines.append(f"  {name}:")
         for tok in layers[name]:
-            lines.append("    - " + emit_key(label(tok)))
+            lines.append("    - " + emit_key(tok))
     if combos:
         lines.append("combos:")
         base_name = order[0]
         for c in combos:
             lines.append("  - {p: [%s], k: %s, l: [%s]}"
                          % (", ".join(str(p) for p in c["p"]), q(c["k"]), base_name))
+    lines += draw_config_block()
     sys.stdout.write("\n".join(lines) + "\n")
 
 
