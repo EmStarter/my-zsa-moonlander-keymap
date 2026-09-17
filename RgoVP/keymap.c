@@ -6,6 +6,11 @@
 #define ZSA_SAFE_RANGE SAFE_RANGE
 #endif
 
+// Left thumb: tap = Repeat Key, hold = layer 2 (Tab still available via combo3).
+// KC_F13 is a throwaway placeholder; the tap is intercepted in process_record_user.
+// Kept here (between Oryx-stable regions) so Oryx's DUAL_FUNC regen never conflicts it.
+#define REP_L2 LT(2, KC_F13)
+
 enum custom_keycodes {
   RGB_SLD = ZSA_SAFE_RANGE,
 };
@@ -21,9 +26,6 @@ enum custom_keycodes {
 #define DUAL_FUNC_6 LT(4, KC_M)
 #define DUAL_FUNC_7 LT(7, KC_F)
 #define DUAL_FUNC_8 LT(2, KC_F4)
-// Left thumb: tap = Repeat Key, hold = layer 2 (Tab still available via combo3).
-// KC_F13 is a throwaway placeholder; the tap is intercepted in process_record_user.
-#define REP_L2 LT(2, KC_F13)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
