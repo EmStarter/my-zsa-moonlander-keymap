@@ -49,17 +49,11 @@ MODMAP = {
     "MOD_HYPR": "Hyper", "MOD_MEH": "Meh",
 }
 
-# custom keycodes: tap/hold semantics live in process_record_user
+# custom keycodes whose tap/hold semantics live in process_record_user.
+# REP_L2 is special (invokes Repeat Key); the DUAL_FUNC_* entries are filled in
+# automatically by parse_custom() so they never go stale after an Oryx resync.
 CUSTOM = {
     "REP_L2": {"t": "Repeat", "h": "L2"},
-    "DUAL_FUNC_0": {"t": "(", "h": "RGui"},
-    "DUAL_FUNC_1": {"t": "#", "h": "LAlt"},
-    "DUAL_FUNC_2": {"t": "@", "h": "LCtl"},
-    "DUAL_FUNC_3": {"t": "!", "h": "LGui"},
-    "DUAL_FUNC_4": {"t": ":", "h": "LSft"},
-    "DUAL_FUNC_5": {"t": "{", "h": "RAlt"},
-    "DUAL_FUNC_6": {"t": "{", "h": "LAlt"},
-    "DUAL_FUNC_7": {"t": "}", "h": "RAlt"},
 }
 
 LAYER_NAMES = ["Base", "Nav", "Mouse", "Num", "Sym", "Fn", "Media"]
@@ -179,6 +173,20 @@ def parse_combos(text, base_tokens):
     return combos
 
 
+def parse_custom(text):
+    """Read the DUAL_FUNC_* tap/hold pairs straight from process_record_user.
+
+    Each case does register_code16(TAP) in the tap branch and register_code16(HOLD)
+    in the hold branch (ignoring the unregister_code16 releases). Keeps the SVG
+    labels in sync with the handlers no matter how Oryx renumbers them.
+    """
+    for m in re.finditer(r"case (DUAL_FUNC_\d+):(.*?)return false;", text, re.S):
+        name, body = m.group(1), m.group(2)
+        regs = re.findall(r"(?<!un)register_code16\((\w+)\)", body)
+        if len(regs) >= 2:
+            CUSTOM[name] = {"t": scalar(regs[0]), "h": scalar(regs[1])}
+
+
 # --- key classification (drives per-key colour via CSS class) --------------
 
 NAV = {"KC_LEFT", "KC_RIGHT", "KC_UP", "KC_DOWN", "KC_PGDN", "KC_PAGE_UP",
@@ -286,6 +294,7 @@ def emit_key(tok):
 def main():
     src = sys.argv[1] if len(sys.argv) > 1 else "RgoVP/keymap.c"
     text = open(src, encoding="utf-8").read()
+    parse_custom(text)
     layers, order = parse_layers(text)
     base = layers[order[0]]
     combos = parse_combos(text, base)
