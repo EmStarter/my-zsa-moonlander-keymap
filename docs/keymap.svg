@@ -1173,11 +1173,9 @@ rect.combo { fill: #cfe3ff; }
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="0" class="key trans tap">▽</text>
 </g>
-<g transform="translate(84, 161)" class="key keypos-29">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="0" class="key tap">
-<tspan x="0" dy="-0.6em">Kp</tspan><tspan x="0" dy="1.2em">Equal</tspan>
-</text>
+<g transform="translate(84, 161)" class="key sym keypos-29">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
+<text x="0" y="0" class="key sym tap">=</text>
 </g>
 <g transform="translate(140, 147)" class="key mod keypos-30">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key mod"/>
@@ -1211,8 +1209,8 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(700, 147)" class="key sym keypos-37">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">(</text>
-<text x="0" y="24" class="key sym hold">RGui</text>
+<text x="0" y="0" class="key sym tap">#</text>
+<text x="0" y="24" class="key sym hold">LAlt</text>
 </g>
 <g transform="translate(756, 140)" class="key mod keypos-38">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key mod"/>
@@ -1221,8 +1219,8 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(812, 147)" class="key sym keypos-39">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">#</text>
-<text x="0" y="24" class="key sym hold">LAlt</text>
+<text x="0" y="0" class="key sym tap">@</text>
+<text x="0" y="24" class="key sym hold">LCtl</text>
 </g>
 <g transform="translate(868, 161)" class="key trans keypos-40">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
@@ -1235,10 +1233,10 @@ rect.combo { fill: #cfe3ff; }
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="0" class="key trans tap">▽</text>
 </g>
-<g transform="translate(84, 217)" class="key mod keypos-43">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key mod"/>
-<text x="0" y="0" class="key mod tap">+</text>
-<text x="0" y="24" class="key mod hold">LSft</text>
+<g transform="translate(84, 217)" class="key sym keypos-43">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
+<text x="0" y="0" class="key sym tap">(</text>
+<text x="0" y="24" class="key sym hold">RGui</text>
 </g>
 <g transform="translate(140, 203)" class="key mod keypos-44">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key mod"/>
@@ -1475,18 +1473,18 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(140, 147)" class="key sym keypos-30">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">@</text>
-<text x="0" y="24" class="key sym hold">LCtl</text>
-</g>
-<g transform="translate(196, 140)" class="key sym keypos-31">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
 <text x="0" y="0" class="key sym tap">!</text>
 <text x="0" y="24" class="key sym hold">LGui</text>
 </g>
-<g transform="translate(252, 147)" class="key sym keypos-32">
+<g transform="translate(196, 140)" class="key sym keypos-31">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
 <text x="0" y="0" class="key sym tap">:</text>
 <text x="0" y="24" class="key sym hold">LSft</text>
+</g>
+<g transform="translate(252, 147)" class="key sym keypos-32">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
+<text x="0" y="0" class="key sym tap">{</text>
+<text x="0" y="24" class="key sym hold">RAlt</text>
 </g>
 <g transform="translate(308, 154)" class="key sym keypos-33">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
@@ -1505,18 +1503,18 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(700, 147)" class="key sym keypos-37">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">(</text>
-<text x="0" y="24" class="key sym hold">RGui</text>
+<text x="0" y="0" class="key sym tap">#</text>
+<text x="0" y="24" class="key sym hold">LAlt</text>
 </g>
 <g transform="translate(756, 140)" class="key sym keypos-38">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">{</text>
-<text x="0" y="24" class="key sym hold">LAlt</text>
+<text x="0" y="0" class="key sym tap">}</text>
+<text x="0" y="24" class="key sym hold">RAlt</text>
 </g>
 <g transform="translate(812, 147)" class="key sym keypos-39">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">#</text>
-<text x="0" y="24" class="key sym hold">LAlt</text>
+<text x="0" y="0" class="key sym tap">@</text>
+<text x="0" y="24" class="key sym hold">LCtl</text>
 </g>
 <g transform="translate(868, 161)" class="key trans keypos-40">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
@@ -1537,7 +1535,7 @@ rect.combo { fill: #cfe3ff; }
 <g transform="translate(140, 203)" class="key sym keypos-44">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
 <text x="0" y="0" class="key sym tap">{</text>
-<text x="0" y="24" class="key sym hold">RAlt</text>
+<text x="0" y="24" class="key sym hold">LAlt</text>
 </g>
 <g transform="translate(196, 196)" class="key sym keypos-45">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
@@ -1564,8 +1562,7 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(812, 203)" class="key sym keypos-51">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">}</text>
-<text x="0" y="24" class="key sym hold">RAlt</text>
+<text x="0" y="0" class="key sym tap"><tspan style="font-size: 64%">DUAL_FUNC_8</tspan></text>
 </g>
 <g transform="translate(868, 217)" class="key mod keypos-52">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key mod"/>
