@@ -32,6 +32,14 @@ Each time you run the GitHub Action, the workflow will:
 7. Flash your downloaded firmware using [Keymapp](https://www.zsa.io/flash#flash-keymap).
 8. Enjoy!
 
+## Halcyon Ferris mirror
+
+`ferris/` holds a keymap for the splitkb Halcyon Ferris rev1 (3x5+2) generated from the Moonlander layout, which only uses 34 keys. The Moonlander's pinky columns sit one row lower; the generator moves them back up so every finger has a plain 3-row column.
+
+- `ferris/generate.py` rewrites `ferris/keymap.c`, `config.h` and `i18n.h` from `RgoVP/`. Run it from the repo root after an Oryx sync; don't edit the generated files. `ferris/rules.mk` is hand-maintained.
+- The **Build Ferris layout** workflow regenerates the keymap and builds it against upstream QMK. It runs after **Fetch and build layout**, on pushes touching `RgoVP/` or `ferris/`, or manually. Flash the `.uf2` by double-tapping the reset button and copying it onto the RPI-RP2 drive (once per half).
+- Keys outside the 34 (e.g. `QK_BOOT` and the RGB keys on the top row of layer 6) are dropped; the generator lists them.
+
 ## Oryx Chrome extension
 
 To make building even easier, [@nivekmai](https://github.com/nivekmai) created an [Oryx Chrome extension](https://chromewebstore.google.com/detail/oryx-extension/bocjciklgnhkejkdfilcikhjfbmbcjal) to be able to trigger the GitHub Actions from inside Oryx itself.

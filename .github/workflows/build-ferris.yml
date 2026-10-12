@@ -1,0 +1,53 @@
+name: Build Ferris layout
+
+# Builds the Halcyon Ferris firmware, generated from the Moonlander layout in RgoVP/.
+# Runs after every Oryx fetch (called from fetch-and-build-layout.yml), on pushes
+# that touch the layout, or manually.
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches: [main]
+    paths:
+      - "RgoVP/**"
+      - "ferris/**"
+      - ".github/workflows/build-ferris.yml"
+
+env:
+  KEYBOARD: splitkb/halcyon/ferris/rev1
+  KEYMAP: mirror
+
+jobs:
+  build-ferris:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Generate Ferris keymap from the Moonlander layout
+        run: python3 ferris/generate.py
+
+      - name: Checkout upstream QMK
+        run: |
+          git clone --depth=1 https://github.com/qmk/qmk_firmware.git qmk_upstream
+          git -C qmk_upstream submodule update --init --recursive --depth=1
+
+      - name: Build the layout
+        id: build-layout
+        run: |
+          keymap_dir="qmk_upstream/keyboards/${KEYBOARD%/rev1}/keymaps/${KEYMAP}"
+          mkdir -p "${keymap_dir}"
+          cp ferris/keymap.c ferris/config.h ferris/rules.mk ferris/i18n.h "${keymap_dir}"
+          docker run --rm -v ./qmk_upstream:/qmk_firmware -w /qmk_firmware ghcr.io/qmk/qmk_cli \
+            make "${KEYBOARD}:${KEYMAP}"
+          echo built_layout_file=$(find ./qmk_upstream -maxdepth 1 -type f -name '*.uf2') >> "$GITHUB_OUTPUT"
+
+      - name: Upload layout
+        uses: actions/upload-artifact@v7
+        with:
+          name: splitkb_halcyon_ferris_rev1_${{ env.KEYMAP }}
+          path: ${{ steps.build-layout.outputs.built_layout_file }}

@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""Generate the Halcyon Ferris (3x5+2) keymap from the Moonlander one.
+
+The Moonlander layout (RgoVP/, edited in Oryx) is the single source of truth.
+It only uses 34 keys, with the pinky columns shifted down one row. This script
+maps those 34 keys onto LAYOUT_split_3x5_2, carries over the combos and custom
+code, and strips the Oryx/ZSA-only bits.
+
+Usage: python3 ferris/generate.py   (from the repo root; re-run after any Oryx sync)
+"""
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+SRC = ROOT / "RgoVP"
+OUT = ROOT / "ferris"
+
+
+def moon_index(row, col):
+    """Token index in LAYOUT_moonlander(...) for absolute (row, col), col 0-13."""
+    if row <= 2:
+        return row * 14 + col
+    if row == 3:  # 6 keys per side, no inner column
+        return 42 + col if col <= 5 else 48 + (col - 8)
+    if row == 4:  # 5 keys + red thumb key per side
+        return 54 + col if col <= 4 else 61 + (col - 9)
+    raise ValueError(row)
+
+
+# Ferris rows, left to right. The Moonlander pinky columns (1 and 12) sit one row
+# lower than the other fingers, so they are shifted back up here.
+FERRIS_POS = []
+for r in range(3):
+    FERRIS_POS += [(r + 2, 1)] + [(r + 1, c) for c in (2, 3, 4, 5)]      # left
+    FERRIS_POS += [(r + 1, c) for c in (8, 9, 10, 11)] + [(r + 2, 12)]   # right
+FERRIS_MAP = [moon_index(r, c) for r, c in FERRIS_POS]
+# Thumbs: Moonlander thumb cluster tokens 66-71; the used ones are the two
+# nearest the alphas on each side (Space, Repeat | Bksp, T on the base layer).
+FERRIS_MAP += [66, 67, 70, 71]
+
+UNUSED_OK = {"KC_TRANSPARENT", "KC_NO"}
+
+# Keycodes the ZSA fork still spells the old way but upstream QMK has renamed.
+RENAMES = {
+    "KC_MS_UP": "MS_UP", "KC_MS_DOWN": "MS_DOWN", "KC_MS_LEFT": "MS_LEFT", "KC_MS_RIGHT": "MS_RGHT",
+    "KC_MS_WH_UP": "MS_WHLU", "KC_MS_WH_DOWN": "MS_WHLD", "KC_MS_WH_LEFT": "MS_WHLL", "KC_MS_WH_RIGHT": "MS_WHLR",
+    "KC_MS_BTN1": "MS_BTN1", "KC_MS_BTN2": "MS_BTN2", "KC_MS_BTN3": "MS_BTN3",
+    "KC_MS_ACCEL0": "MS_ACL0", "KC_MS_ACCEL1": "MS_ACL1", "KC_MS_ACCEL2": "MS_ACL2",
+    "RGB_TOG": "RM_TOGG", "RGB_MODE_FORWARD": "RM_NEXT", "RGB_VAD": "RM_VALD", "RGB_VAI": "RM_VALU",
+    "RGB_SPD": "RM_SPDD", "RGB_SPI": "RM_SPDU", "RGB_HUD": "RM_HUED", "RGB_HUI": "RM_HUEU",
+}
+
+
+def split_top(s):
+    out, depth, cur = [], 0, ""
+    for c in s:
+        if c == "(":
+            depth += 1
+        elif c == ")":
+            depth -= 1
+        if c == "," and depth == 0:
+            out.append(cur.strip())
+            cur = ""
+        else:
+            cur += c
+    if cur.strip():
+        out.append(cur.strip())
+    return out
+
+
+def matching_paren(text, start):
+    """Index just past the ')' closing the '(' that precedes `start`."""
+    depth, j = 1, start
+    while depth:
+        depth += {"(": 1, ")": -1}.get(text[j], 0)
+        j += 1
+    return j
+
+
+def convert_layers(text):
+    out, pos = [], 0
+    for m in re.finditer(r"\[(\d+)\]\s*=\s*LAYOUT_moonlander\(", text):
+        end = matching_paren(text, m.end())
+        toks = [re.sub(r"\s+", "", t) for t in split_top(text[m.end():end - 1])]
+        if len(toks) != 72:
+            sys.exit(f"layer {m.group(1)}: expected 72 keys, got {len(toks)}")
+        used = set(FERRIS_MAP)
+        for i, t in enumerate(toks):
+            if i not in used and t not in UNUSED_OK:
+                print(f"note: layer {m.group(1)} drops {t} (outside the 34 keys)", file=sys.stderr)
+        k = [toks[i] for i in FERRIS_MAP]
+        rows = [k[0:10], k[10:20], k[20:30]]
+        body = "".join("    " + ", ".join(r[:5]) + ",    " + ", ".join(r[5:]) + ",\n" for r in rows)
+        body += "                " + ", ".join(k[30:32]) + ",    " + ", ".join(k[32:34]) + "\n  )"
+        out.append(text[pos:m.start()])
+        out.append(f"[{m.group(1)}] = LAYOUT_split_3x5_2(\n" + body)
+        pos = end
+    out.append(text[pos:])
+    return "".join(out)
+
+
+CHORDAL = """const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM = LAYOUT_split_3x5_2(
+  'L', 'L', 'L', 'L', 'L',    'R', 'R', 'R', 'R', 'R',
+  'L', 'L', 'L', 'L', 'L',    'R', 'R', 'R', 'R', 'R',
+  'L', 'L', 'L', 'L', 'L',    'R', 'R', 'R', 'R', 'R',
+                 '*', '*',    '*', '*'
+);"""
+
+
+def convert_keymap(text):
+    text = convert_layers(text)
+    text, n = re.subn(r"const char chordal_hold_layout\[.*?\);", lambda _: CHORDAL, text, flags=re.S)
+    if n != 1:
+        sys.exit("chordal_hold_layout not found")
+    # RGB_SLD is an Oryx keycode (needs rawhid_state / rgblight); drop its handler.
+    text = re.sub(r"\n[ \t]*case RGB_SLD:.*?rgblight_mode\(1\);\s*\}\s*return false;", "", text, flags=re.S)
+    text = re.sub(r"\b(%s)\b" % "|".join(RENAMES), lambda m: RENAMES[m.group(1)], text)
+    if "rawhid_state" in text:
+        sys.exit("unhandled Oryx-only code (rawhid_state) left in keymap.c")
+    header = ("// GENERATED by ferris/generate.py from RgoVP/keymap.c -- do not edit.\n"
+              "// Edit the Moonlander layout (Oryx or RgoVP/) and re-run the script.\n")
+    return header + text
+
+
+def convert_config(text):
+    keep = []
+    for line in text.splitlines():
+        # Moonlander-only: Oryx serial number and RGB matrix tuning.
+        if re.search(r"SERIAL_NUMBER|RGB_MATRIX|USB_SUSPEND_WAKEUP_DELAY", line):
+            continue
+        keep.append(line)
+    body = re.sub(r"\n{3,}", "\n\n", "\n".join(keep)).strip() + "\n"
+    return ("// GENERATED by ferris/generate.py from RgoVP/config.h -- do not edit.\n"
+            "#pragma once\n\n" + body)
+
+
+def main():
+    (OUT / "keymap.c").write_text(convert_keymap((SRC / "keymap.c").read_text()))
+    (OUT / "config.h").write_text(convert_config((SRC / "config.h").read_text()))
+    (OUT / "i18n.h").write_text((SRC / "i18n.h").read_text())
+    print(f"Wrote {OUT.relative_to(ROOT)}/{{keymap.c,config.h,i18n.h}}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

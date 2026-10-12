@@ -124,3 +124,9 @@ jobs:
         with:
           name: ${{ steps.build-layout.outputs.normalized_layout_geometry }}_${{ github.event.inputs.layout_id }}
           path: ${{ steps.build-layout.outputs.built_layout_file }}
+
+  # Pushes made with GITHUB_TOKEN don't trigger other workflows, so call the
+  # Ferris build explicitly once the Oryx changes are merged into main.
+  build-ferris:
+    needs: fetch-and-build-layout
+    uses: ./.github/workflows/build-ferris.yml
