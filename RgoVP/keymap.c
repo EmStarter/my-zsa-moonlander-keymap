@@ -17,14 +17,14 @@ enum custom_keycodes {
 
 
 
-#define DUAL_FUNC_0 LT(9, KC_F23)
-#define DUAL_FUNC_1 LT(11, KC_T)
-#define DUAL_FUNC_2 LT(7, KC_D)
-#define DUAL_FUNC_3 LT(8, KC_F5)
-#define DUAL_FUNC_4 LT(4, KC_F2)
-#define DUAL_FUNC_5 LT(5, KC_T)
-#define DUAL_FUNC_6 LT(7, KC_N)
-#define DUAL_FUNC_7 LT(5, KC_7)
+#define DUAL_FUNC_0 LT(11, KC_D)
+#define DUAL_FUNC_1 LT(12, KC_O)
+#define DUAL_FUNC_2 LT(3, KC_E)
+#define DUAL_FUNC_3 LT(2, KC_F16)
+#define DUAL_FUNC_4 LT(6, KC_O)
+#define DUAL_FUNC_5 LT(3, KC_F6)
+#define DUAL_FUNC_6 LT(4, KC_F2)
+#define DUAL_FUNC_7 LT(3, KC_6)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
@@ -120,8 +120,8 @@ combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo4, KC_ESCAPE),
     COMBO(combo5, OSM(MOD_HYPR)),
     COMBO(combo6, OSM(MOD_MEH)),
-    COMBO(combo7, US_ADIA),
-    COMBO(combo8, US_ODIA),
+    COMBO(combo7, SE_ADIA),
+    COMBO(combo8, SE_OSLH),
 };
 
 
