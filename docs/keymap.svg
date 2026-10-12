@@ -409,9 +409,8 @@ rect.combo { fill: #cfe3ff; }
 <g transform="translate(868, 273)" class="key layer keypos-64">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key layer"/>
 <text x="0" y="0" class="key layer tap">Z</text>
-<a href="#L7">
-<text x="0" y="24" class="key layer hold layer-activator">L7</text>
-</a></g>
+<text x="0" y="24" class="key layer hold">L7</text>
+</g>
 <g transform="translate(924, 273)" class="key trans keypos-65">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="0" class="key trans tap">▽</text>
@@ -423,7 +422,7 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(364, 350)" class="key layer keypos-67">
 <rect rx="6" ry="6" x="-26" y="-40" width="52" height="80" class="key layer"/>
-<text x="0" y="0" class="key layer tap">F13</text>
+<text x="0" y="0" class="key layer tap">Repeat</text>
 <text x="0" y="38" class="key layer hold">L2</text>
 </g>
 <g transform="translate(420, 350)" class="key trans keypos-68">
@@ -490,11 +489,11 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g class="combo combopos-7">
 <rect rx="6" ry="6" x="714" y="130" width="28" height="26" class="combo"/>
-<text x="728" y="144" class="combo tap">US_ADIA</text>
+<text x="728" y="144" class="combo tap">ä</text>
 </g>
 <g class="combo combopos-8">
 <rect rx="6" ry="6" x="714" y="186" width="28" height="26" class="combo"/>
-<text x="728" y="200" class="combo tap">US_ODIA</text>
+<text x="728" y="200" class="combo tap">ö</text>
 </g>
 </g>
 </g>
@@ -2005,8 +2004,9 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(924, 49)" class="key sys keypos-13">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sys"/>
-<text x="0" y="0" class="key sys tap">Boot</text>
-</g>
+<a href="#Boot">
+<text x="0" y="0" class="key sys tap layer-activator">Boot</text>
+</a></g>
 <g transform="translate(28, 105)" class="key trans keypos-14">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="0" class="key trans tap">▽</text>
@@ -2218,8 +2218,8 @@ rect.combo { fill: #cfe3ff; }
 </g>
 </g>
 </g>
-<g transform="translate(30, 3136)" class="layer-L7">
-<text x="0" y="28" class="label" id="L7">L7:</text>
+<g transform="translate(30, 3136)" class="layer-Boot">
+<text x="0" y="28" class="label" id="Boot">Boot:</text>
 <g transform="translate(0, 56)">
 <g transform="translate(28, 49)" class="key trans keypos-0">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
@@ -2339,8 +2339,9 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(84, 161)" class="key sys keypos-29">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sys"/>
-<text x="0" y="0" class="key sys tap">Boot</text>
-</g>
+<a href="#Boot">
+<text x="0" y="0" class="key sys tap layer-activator">Boot</text>
+</a></g>
 <g transform="translate(140, 147)" class="key trans keypos-30">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="0" class="key trans tap">▽</text>

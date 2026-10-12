@@ -30,7 +30,7 @@ SCALAR = {
     "QK_BOOT": "Boot", "AU_TOGG": "Audio", "RGB_TOG": "RGB", "RGB_SLD": "RGB Solid",
     "RGB_MODE_FORWARD": "RGB Mode", "RGB_VAD": "Val-", "RGB_VAI": "Val+",
     "RGB_SPD": "Spd-", "RGB_SPI": "Spd+", "RGB_HUD": "Hue-", "RGB_HUI": "Hue+",
-    "CW_TOGG": "Caps Word",
+    "CW_TOGG": "Caps Word", "US_ADIA": "ä", "US_ODIA": "ö",
     # shifted symbols / punctuation
     "KC_DQUO": '"', "KC_DOT": ".", "KC_COMMA": ",", "KC_SLASH": "/",
     "KC_RABK": ">", "KC_LABK": "<", "KC_EQUAL": "=", "KC_BSLS": "\\",
@@ -50,13 +50,15 @@ MODMAP = {
 }
 
 # custom keycodes whose tap/hold semantics live in process_record_user.
-# REP_L2 is special (invokes Repeat Key); the DUAL_FUNC_* entries are filled in
-# automatically by parse_custom() so they never go stale after an Oryx resync.
+# REP_L2 is special (invokes Repeat Key); Oryx emits it as LT(2, KC_F13), so map
+# that spelling too. The DUAL_FUNC_* entries are filled in automatically by
+# parse_custom() so they never go stale after an Oryx resync.
 CUSTOM = {
     "REP_L2": {"t": "Repeat", "h": "L2"},
+    "LT(2,KC_F13)": {"t": "Repeat", "h": "L2"},
 }
 
-LAYER_NAMES = ["Base", "Nav", "Mouse", "Num", "Sym", "Fn", "Media"]
+LAYER_NAMES = ["Base", "Nav", "Mouse", "Num", "Sym", "Fn", "Media", "Boot"]
 
 
 def scalar(tok):
