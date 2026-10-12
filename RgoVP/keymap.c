@@ -17,14 +17,14 @@ enum custom_keycodes {
 
 
 
-#define DUAL_FUNC_0 LT(9, KC_F13)
-#define DUAL_FUNC_1 LT(5, KC_F2)
-#define DUAL_FUNC_2 LT(4, KC_L)
-#define DUAL_FUNC_3 LT(3, KC_F8)
-#define DUAL_FUNC_4 LT(1, KC_M)
-#define DUAL_FUNC_5 LT(5, KC_F10)
-#define DUAL_FUNC_6 LT(3, KC_6)
-#define DUAL_FUNC_7 LT(6, KC_9)
+#define DUAL_FUNC_0 LT(6, KC_5)
+#define DUAL_FUNC_1 LT(8, KC_T)
+#define DUAL_FUNC_2 LT(4, KC_F24)
+#define DUAL_FUNC_3 LT(2, KC_E)
+#define DUAL_FUNC_4 LT(8, KC_H)
+#define DUAL_FUNC_5 LT(14, KC_P)
+#define DUAL_FUNC_6 LT(10, KC_M)
+#define DUAL_FUNC_7 LT(4, KC_9)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
@@ -109,6 +109,8 @@ const uint16_t PROGMEM combo3[] = { KC_DQUO, MT(MOD_RALT, KC_QUOTE), COMBO_END};
 const uint16_t PROGMEM combo4[] = { KC_Y, KC_O, COMBO_END};
 const uint16_t PROGMEM combo5[] = { KC_M, MT(MOD_RSFT, KC_W), COMBO_END};
 const uint16_t PROGMEM combo6[] = { KC_DOT, MT(MOD_LSFT, KC_H), COMBO_END};
+const uint16_t PROGMEM combo7[] = { MT(MOD_RGUI, KC_S), MT(MOD_RCTL, KC_R), COMBO_END};
+const uint16_t PROGMEM combo8[] = { KC_K, KC_C, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo0, OSL(5)),
@@ -118,6 +120,8 @@ combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo4, KC_ESCAPE),
     COMBO(combo5, OSM(MOD_HYPR)),
     COMBO(combo6, OSM(MOD_MEH)),
+    COMBO(combo7, RALT(KC_A)),
+    COMBO(combo8, RALT(KC_O)),
 };
 
 
