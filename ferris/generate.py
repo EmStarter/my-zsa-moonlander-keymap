@@ -47,9 +47,12 @@ RENAMES = {
     "KC_MS_WH_UP": "MS_WHLU", "KC_MS_WH_DOWN": "MS_WHLD", "KC_MS_WH_LEFT": "MS_WHLL", "KC_MS_WH_RIGHT": "MS_WHLR",
     "KC_MS_BTN1": "MS_BTN1", "KC_MS_BTN2": "MS_BTN2", "KC_MS_BTN3": "MS_BTN3",
     "KC_MS_ACCEL0": "MS_ACL0", "KC_MS_ACCEL1": "MS_ACL1", "KC_MS_ACCEL2": "MS_ACL2",
-    "RGB_TOG": "RM_TOGG", "RGB_MODE_FORWARD": "RM_NEXT", "RGB_VAD": "RM_VALD", "RGB_VAI": "RM_VALU",
-    "RGB_SPD": "RM_SPDD", "RGB_SPI": "RM_SPDU", "RGB_HUD": "RM_HUED", "RGB_HUI": "RM_HUEU",
 }
+
+
+def ferris_key(tok):
+    """The Ferris has no LEDs, so lighting keys become KC_NO."""
+    return "KC_NO" if re.match(r"^(RGB_|RM_|UG_)", tok) else tok
 
 
 def split_top(s):
@@ -89,7 +92,7 @@ def convert_layers(text):
         for i, t in enumerate(toks):
             if i not in used and t not in UNUSED_OK:
                 print(f"note: layer {m.group(1)} drops {t} (outside the 34 keys)", file=sys.stderr)
-        k = [toks[i] for i in FERRIS_MAP]
+        k = [ferris_key(toks[i]) for i in FERRIS_MAP]
         rows = [k[0:10], k[10:20], k[20:30]]
         body = "".join("    " + ", ".join(r[:5]) + ",    " + ", ".join(r[5:]) + ",\n" for r in rows)
         body += "                " + ", ".join(k[30:32]) + ",    " + ", ".join(k[32:34]) + "\n  )"

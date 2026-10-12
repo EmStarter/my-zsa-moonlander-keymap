@@ -1049,21 +1049,17 @@ rect.combo { fill: #cfe3ff; }
 <g transform="translate(252, 52)" class="key trans keypos-4">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 </g>
-<g transform="translate(420, 52)" class="key sys keypos-5">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sys"/>
-<text x="0" y="0" class="key sys tap">Spd-</text>
+<g transform="translate(420, 52)" class="key trans keypos-5">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 </g>
-<g transform="translate(476, 44)" class="key sys keypos-6">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sys"/>
-<text x="0" y="0" class="key sys tap">Spd+</text>
+<g transform="translate(476, 44)" class="key trans keypos-6">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 </g>
-<g transform="translate(532, 28)" class="key sys keypos-7">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sys"/>
-<text x="0" y="0" class="key sys tap">Hue-</text>
+<g transform="translate(532, 28)" class="key trans keypos-7">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 </g>
-<g transform="translate(588, 45)" class="key sys keypos-8">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sys"/>
-<text x="0" y="0" class="key sys tap">Hue+</text>
+<g transform="translate(588, 45)" class="key trans keypos-8">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 </g>
 <g transform="translate(644, 80)" class="key trans keypos-9">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
