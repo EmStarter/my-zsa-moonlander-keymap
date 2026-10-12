@@ -1,5 +1,5 @@
 {
-  description = "Keymap visualization (keymap-drawer) for the Moonlander layout";
+  description = "Keymap visualization (keymap-drawer) for the Moonlander and Ferris layouts";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -20,6 +20,11 @@
               > "$root/keymap-viz/keymap.yaml"
             keymap draw "$root/keymap-viz/keymap.yaml" > "$root/docs/keymap.svg"
             echo "Wrote $root/docs/keymap.svg"
+            python3 "$root/ferris/generate.py"
+            python3 "$root/keymap-viz/keymap2yaml.py" "$root/ferris/keymap.c" \
+              > "$root/keymap-viz/ferris-keymap.yaml"
+            keymap draw "$root/keymap-viz/ferris-keymap.yaml" > "$root/docs/ferris-keymap.svg"
+            echo "Wrote $root/docs/ferris-keymap.svg"
           '';
         };
       in

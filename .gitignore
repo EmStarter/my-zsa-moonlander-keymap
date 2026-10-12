@@ -2,5 +2,5 @@
 *.iml
 
 # keymap-viz generated artifacts
-keymap-viz/keymap.yaml
+keymap-viz/*keymap.yaml
 __pycache__/

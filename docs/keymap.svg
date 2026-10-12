@@ -1625,9 +1625,9 @@ rect.combo { fill: #cfe3ff; }
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="0" class="key trans tap">▽</text>
 </g>
-<g transform="translate(308, 350)" class="key keypos-66">
-<rect rx="6" ry="6" x="-26" y="-40" width="52" height="80" class="key"/>
-<text x="0" y="0" class="key tap">Ques</text>
+<g transform="translate(308, 350)" class="key sym keypos-66">
+<rect rx="6" ry="6" x="-26" y="-40" width="52" height="80" class="key sym"/>
+<text x="0" y="0" class="key sym tap">?</text>
 </g>
 <g transform="translate(364, 350)" class="key sym keypos-67">
 <rect rx="6" ry="6" x="-26" y="-40" width="52" height="80" class="key sym"/>

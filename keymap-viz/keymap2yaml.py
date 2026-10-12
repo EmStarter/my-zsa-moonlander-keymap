@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Parse RgoVP/keymap.c into a keymap-drawer YAML spec.
+"""Parse RgoVP/keymap.c (or the generated ferris/keymap.c) into a keymap-drawer YAML spec.
 
-Handles the QMK LAYOUT_moonlander keymaps array, mod-taps / layer-taps,
+Handles the QMK LAYOUT_moonlander / LAYOUT_split_3x5_2 keymaps array, mod-taps / layer-taps,
 this layout's custom keycodes (REP_L2, DUAL_FUNC_*), and the source-side
 combos (comboN arrays + key_combos[] outputs). Re-run after any Oryx sync.
 
@@ -30,6 +30,13 @@ SCALAR = {
     "QK_BOOT": "Boot", "AU_TOGG": "Audio", "RGB_TOG": "RGB", "RGB_SLD": "RGB Solid",
     "RGB_MODE_FORWARD": "RGB Mode", "RGB_VAD": "Val-", "RGB_VAI": "Val+",
     "RGB_SPD": "Spd-", "RGB_SPI": "Spd+", "RGB_HUD": "Hue-", "RGB_HUI": "Hue+",
+    # upstream QMK names (the generated Ferris keymap uses these)
+    "MS_UP": "M↑", "MS_DOWN": "M↓", "MS_LEFT": "M←", "MS_RGHT": "M→",
+    "MS_BTN1": "LMB", "MS_BTN2": "RMB", "MS_BTN3": "MMB",
+    "MS_WHLU": "Wh↑", "MS_WHLD": "Wh↓", "MS_WHLL": "Wh←", "MS_WHLR": "Wh→",
+    "MS_ACL0": "Acc0", "MS_ACL1": "Acc1", "MS_ACL2": "Acc2",
+    "RM_TOGG": "RGB", "RM_NEXT": "RGB Mode", "RM_VALD": "Val-", "RM_VALU": "Val+",
+    "RM_SPDD": "Spd-", "RM_SPDU": "Spd+", "RM_HUED": "Hue-", "RM_HUEU": "Hue+",
     "CW_TOGG": "Caps Word", "US_ADIA": "ä", "US_ODIA": "ö",
     # shifted symbols / punctuation
     "KC_DQUO": '"', "KC_DOT": ".", "KC_COMMA": ",", "KC_SLASH": "/",
@@ -38,7 +45,7 @@ SCALAR = {
     "KC_CIRC": "^", "KC_PERC": "%", "KC_DLR": "$", "KC_RBRC": "]", "KC_LBRC": "[",
     "KC_PLUS": "+", "KC_ASTR": "*", "KC_AMPR": "&", "KC_PIPE": "|", "KC_TILD": "~",
     "KC_RCBR": "}", "KC_LCBR": "{", "KC_UNDS": "_", "KC_MINUS": "-", "KC_GRAVE": "`",
-    "KC_HASH": "#", "KC_AT": "@", "KC_EXLM": "!", "KC_COLN": ":",
+    "KC_HASH": "#", "KC_AT": "@", "KC_EXLM": "!", "KC_COLN": ":", "KC_QUES": "?",
     "KC_KP_PLUS": "+", "KC_KP_COMMA": ",", "KC_KP_DOT": ".",
     "KC_KP_ASTERISK": "*", "KC_KP_SLASH": "/",
 }
@@ -56,6 +63,11 @@ MODMAP = {
 CUSTOM = {
     "REP_L2": {"t": "Repeat", "h": "L2"},
     "LT(2,KC_F13)": {"t": "Repeat", "h": "L2"},
+}
+
+# AltGr combos that type a character on the EurKEY OS layout
+EURKEY = {
+    "RALT(KC_A)": "ä", "RALT(KC_O)": "ö", "RALT(KC_U)": "ü", "RALT(KC_S)": "ß",
 }
 
 LAYER_NAMES = ["Base", "Nav", "Mouse", "Num", "Sym", "Fn", "Media", "Boot"]
@@ -76,6 +88,8 @@ def label(tok):
     """Map a normalized (no-space) keycode token to a keymap-drawer key spec."""
     if tok in CUSTOM:
         return dict(CUSTOM[tok])
+    if tok in EURKEY:
+        return EURKEY[tok]
     m = re.match(r"^MT\((MOD_\w+),(.+)\)$", tok)
     if m:
         return {"t": scalar_of(m.group(2)), "h": MODMAP.get(m.group(1), m.group(1))}
@@ -100,6 +114,13 @@ def scalar_of(tok):
     """Label for something known to be a plain (possibly nested) keycode."""
     out = label(tok)
     return out if isinstance(out, str) else tok
+
+
+# layout macro -> keymap-drawer physical layout
+BOARDS = {
+    "LAYOUT_moonlander": ("zsa/moonlander", "LAYOUT"),
+    "LAYOUT_split_3x5_2": ("splitkb/halcyon/ferris/rev1", "LAYOUT_split_3x5_2"),
+}
 
 
 # --- parsing ---------------------------------------------------------------
@@ -131,7 +152,7 @@ def norm(tok):
 def parse_layers(text):
     layers = {}
     order = []
-    for m in re.finditer(r"\[(\d+)\]\s*=\s*LAYOUT_moonlander\(", text):
+    for m in re.finditer(r"\[(\d+)\]\s*=\s*(?:%s)\(" % "|".join(BOARDS), text):
         idx = int(m.group(1))
         start = j = m.end()
         depth = 1
@@ -197,7 +218,7 @@ MODS = {"KC_LEFT_ALT", "KC_LEFT_CTRL", "KC_LEFT_GUI", "KC_LEFT_SHIFT",
         "KC_RIGHT_ALT", "KC_RIGHT_GUI", "KC_RIGHT_SHIFT", "KC_RIGHT_CTRL"}
 FUNC = {"KC_SPACE", "KC_ENTER", "KC_TAB", "KC_ESCAPE", "KC_BSPC", "KC_DELETE",
         "KC_CAPS"}
-SYS_PREFIX = ("KC_AUDIO_", "KC_MEDIA_", "RGB_", "KC_MS_", "KC_PC_")
+SYS_PREFIX = ("KC_AUDIO_", "KC_MEDIA_", "RGB_", "KC_MS_", "KC_PC_", "MS_", "RM_")
 SYS = {"AU_TOGG", "QK_BOOT", "CW_TOGG", "RGB_SLD", "RGB_TOG",
        "RGB_MODE_FORWARD"}
 
@@ -208,7 +229,7 @@ SYMS = {
     "KC_CIRC", "KC_PERC", "KC_DLR", "KC_RBRC", "KC_LBRC", "KC_PLUS",
     "KC_ASTR", "KC_AMPR", "KC_PIPE", "KC_TILD", "KC_RCBR", "KC_LCBR",
     "KC_UNDS", "KC_RPRN", "KC_LPRN", "KC_HASH", "KC_AT", "KC_EXLM",
-    "KC_COLN", "KC_KP_PLUS", "KC_KP_COMMA", "KC_KP_DOT", "KC_KP_ASTERISK",
+    "KC_COLN", "KC_QUES", "KC_KP_PLUS", "KC_KP_COMMA", "KC_KP_DOT", "KC_KP_ASTERISK",
     "KC_KP_SLASH",
 }
 
@@ -303,8 +324,10 @@ def main():
 
     lines = []
     lines.append("layout:")
-    lines.append("  qmk_keyboard: zsa/moonlander")
-    lines.append("  layout_name: LAYOUT")
+    macro = re.search(r"\]\s*=\s*(%s)\(" % "|".join(BOARDS), text).group(1)
+    keyboard, layout_name = BOARDS[macro]
+    lines.append(f"  qmk_keyboard: {keyboard}")
+    lines.append(f"  layout_name: {layout_name}")
     lines.append("layers:")
     for name in order:
         lines.append(f"  {name}:")

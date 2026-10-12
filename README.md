@@ -38,6 +38,7 @@ Each time you run the GitHub Action, the workflow will:
 
 - `ferris/generate.py` rewrites `ferris/keymap.c`, `config.h` and `i18n.h` from `RgoVP/`. CI runs it and commits the result back to `main` whenever it changes, so after an Oryx sync just `git pull`; don't edit the generated files. `ferris/rules.mk` is hand-maintained.
 - The **Build Ferris layout** workflow regenerates the keymap and builds it against upstream QMK. It runs after **Fetch and build layout**, on pushes touching `RgoVP/` or `ferris/`, or manually. Flash the `.uf2` by double-tapping the reset button and copying it onto the RPI-RP2 drive (once per half).
+- `nix run` draws `docs/ferris-keymap.svg` alongside the Moonlander `docs/keymap.svg`.
 - Keys outside the 34 (e.g. `QK_BOOT` and the RGB keys on the top row of layer 6) are dropped; the generator lists them.
 
 ## Oryx Chrome extension
