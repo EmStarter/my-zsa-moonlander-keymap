@@ -12,6 +12,7 @@ on:
     paths:
       - "RgoVP/**"
       - "ferris/**"
+      - "keymap-viz/**"
       - ".github/workflows/build-ferris.yml"
 
 permissions:
@@ -31,17 +32,23 @@ jobs:
         with:
           ref: main
 
-      - name: Generate Ferris keymap from the Moonlander layout
-        run: python3 ferris/generate.py
+      # Same version as nixpkgs' keymap-drawer in flake.lock, so `nix run` and CI
+      # produce identical SVGs. Bump both together.
+      - name: Install keymap-drawer
+        run: pipx install keymap-drawer==0.23.0
 
-      # Keep the committed ferris/ files in sync with the Moonlander layout.
+      # Regenerates ferris/ from the Moonlander layout and draws both SVGs.
+      - name: Generate Ferris keymap and draw keymap SVGs
+        run: bash keymap-viz/draw.sh
+
+      # Keep the committed ferris/ files and SVGs in sync with the Moonlander layout.
       # Pushes made with GITHUB_TOKEN don't trigger workflows, so this can't loop.
-      - name: Commit regenerated Ferris keymap
+      - name: Commit regenerated Ferris keymap and SVGs
         run: |
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@github.com"
-          git add ferris/
-          if git commit -m "🤖(ferris): Regenerate keymap from Moonlander layout"; then
+          git add ferris/ docs/
+          if git commit -m "🤖(ferris): Regenerate keymap and SVGs from Moonlander layout"; then
             git pull --rebase origin main
             git push origin HEAD:main
           else

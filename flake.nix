@@ -14,17 +14,9 @@
           name = "draw-keymap";
           runtimeInputs = [ pkgs.keymap-drawer pkgs.python3 ];
           text = ''
+            # CI pins the same keymap-drawer version (build-ferris.yml) so the SVGs match.
             root="''${1:-$PWD}"
-            mkdir -p "$root/docs"
-            python3 "$root/keymap-viz/keymap2yaml.py" "$root/RgoVP/keymap.c" \
-              > "$root/keymap-viz/keymap.yaml"
-            keymap draw "$root/keymap-viz/keymap.yaml" > "$root/docs/keymap.svg"
-            echo "Wrote $root/docs/keymap.svg"
-            python3 "$root/ferris/generate.py"
-            python3 "$root/keymap-viz/keymap2yaml.py" "$root/ferris/keymap.c" \
-              > "$root/keymap-viz/ferris-keymap.yaml"
-            keymap draw "$root/keymap-viz/ferris-keymap.yaml" > "$root/docs/ferris-keymap.svg"
-            echo "Wrote $root/docs/ferris-keymap.svg"
+            bash "$root/keymap-viz/draw.sh" "$root"
           '';
         };
       in
