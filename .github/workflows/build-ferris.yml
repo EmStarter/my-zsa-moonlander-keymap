@@ -14,6 +14,9 @@ on:
       - "ferris/**"
       - ".github/workflows/build-ferris.yml"
 
+permissions:
+  contents: write
+
 env:
   KEYBOARD: splitkb/halcyon/ferris/rev1
   KEYMAP: mirror
@@ -30,6 +33,20 @@ jobs:
 
       - name: Generate Ferris keymap from the Moonlander layout
         run: python3 ferris/generate.py
+
+      # Keep the committed ferris/ files in sync with the Moonlander layout.
+      # Pushes made with GITHUB_TOKEN don't trigger workflows, so this can't loop.
+      - name: Commit regenerated Ferris keymap
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git add ferris/
+          if git commit -m "🤖(ferris): Regenerate keymap from Moonlander layout"; then
+            git pull --rebase origin main
+            git push origin HEAD:main
+          else
+            echo "Ferris keymap already up to date"
+          fi
 
       - name: Checkout upstream QMK
         run: |
