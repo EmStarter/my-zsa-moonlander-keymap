@@ -53,6 +53,19 @@ No local firmware build is set up. Builds run in GitHub Actions:
 - **Moonlander:** run *Fetch and build layout* by hand. Pushing to `main` does **not** rebuild it. Flash the artifact with Keymapp.
 - **Ferris:** *Build Ferris layout* runs on pushes that touch `RgoVP/`, `ferris/`, `keymap-viz/` or its own workflow file, after each Oryx fetch, or by hand. It commits the regenerated `ferris/` and `docs/` back to `main`, so `git pull` after it runs. To flash, double-tap reset and copy the `.uf2` onto each half.
 
+## Flashing
+
+Download artifacts with `gh run download <run-id>`. The Moonlander `.bin` and the Ferris `.uf2` both come from the *Fetch and build layout* run; pushes produce only the Ferris `.uf2`, from *Build Ferris layout*. Find run IDs with `gh run list`.
+
+- **Moonlander** (STM32, DFU bootloader): the user flashes with Keymapp. Don't attempt it yourself.
+- **Ferris** (RP2040, UF2 bootloader). No QMK CLI or flashing tool is needed. Each half is flashed separately with the same `.uf2`:
+  1. The user plugs one half into the laptop and double-taps its reset button. You can't press it, so ask.
+  2. Check that it is in bootloader mode: `lsusb` shows `2e8a:0003 Raspberry Pi RP2 Boot`, and `lsblk` shows a partition labelled `RPI-RP2`.
+  3. It isn't auto-mounted. Mount it with `udisksctl mount -b /dev/sdX1`. It lands at `/media/RPI-RP2`.
+  4. Run `cp <file>.uf2 /media/RPI-RP2/ && sync`. The drive disappears and the half comes back as `8d1d:e050 splitkb.com Halcyon Ferris rev1`, which means the flash worked.
+  5. Repeat for the other half. Both halves report the same bootloader serial, so tell them apart by the QMK serial in `journalctl -k`, which differs per half.
+- If nothing shows up in `lsusb` and there are no new USB events in `journalctl -k`, the cable is probably charge-only. Ask the user to swap it.
+
 keymap-drawer is pinned to the same version in `build-ferris.yml` (pipx) and in `flake.lock` (nixpkgs) so the SVGs come out identical. Bump both together.
 
 ## Conventions

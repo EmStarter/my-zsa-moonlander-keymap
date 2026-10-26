@@ -1,46 +1,68 @@
-# Oryx with custom QMK
+# My Moonlander and Ferris keymap
 
-This repository allows combining the convenience of [Oryx’s](https://www.zsa.io/oryx) graphical layout editing with the power of [QMK](https://qmk.fm), allowing you to customize your Oryx layout with advanced QMK features like Achordion and Repeat Key, while automating firmware builds through GitHub Actions.
+Keymaps for two keyboards that share one layout:
 
-For a detailed guide, check out the full [blog post here](https://blog.zsa.io/oryx-custom-qmk-features).
+- **ZSA Moonlander** (`RgoVP/`): edited in [Oryx](https://configure.zsa.io/moonlander/layouts/RgoVP/latest), extended with custom QMK code.
+- **splitkb Halcyon Ferris rev1** (`ferris/`): 3x5+2, generated from the Moonlander layout. The Moonlander layout only uses 34 keys, so the Ferris gets the same layout.
+
+Based on [poulainpi/oryx-with-custom-qmk](https://github.com/poulainpi/oryx-with-custom-qmk), which merges Oryx's graphical layout editing with hand-written QMK features and builds the firmware in GitHub Actions. See ZSA's [blog post](https://blog.zsa.io/oryx-custom-qmk-features) for the background.
+
+## Layout
+
+![Moonlander keymap](docs/keymap.svg)
+
+The Ferris version is in [`docs/ferris-keymap.svg`](docs/ferris-keymap.svg). Both SVGs are redrawn by CI whenever the layout changes.
+
+Custom QMK features on top of Oryx:
+
+- **Repeat key** on the left thumb: tap to repeat the last key, hold for layer 2. Repeat also replays AltGr dead keys, so after AltGr+~ then o (õ), it types õ again instead of o.
+- **Chordal Hold** for the home-row mods.
+- **Combos** for Enter, Esc, Tab, Caps Word, ä/ö and one-shot Hyper/Meh.
 
 ## How it works
 
-Each time you run the GitHub Action, the workflow will:
-1. Fetch the latest changes made in Oryx.
-2. Merge them with any QMK features you've added in the source code.
-3. Build the firmware, incorporating modifications from both Oryx and your custom source code.
+- The `oryx` branch holds raw Oryx exports. `main` holds those merged with the custom QMK code.
+- **Fetch and build layout** (run by hand): downloads the latest layout from Oryx, commits it to `oryx`, merges it into `main`, and builds the Moonlander firmware with ZSA's QMK fork. It then runs **Build Ferris layout**.
+- **Build Ferris layout** (runs on pushes touching the layout, after every Oryx fetch, or by hand):
+  1. Regenerates `ferris/` from `RgoVP/` with `ferris/generate.py`.
+  2. Redraws both SVGs.
+  3. Commits any changes back to `main`.
+  4. Builds the Ferris firmware with upstream QMK.
 
-## How to use
+The generated Ferris files (`keymap.c`, `config.h`, `i18n.h`) are never edited by hand. Only `ferris/rules.mk` is. The generator:
 
-1. Fork this repository (be sure to **uncheck the "Copy the main branch only" option**).
-2. To initialize the repository with your layout:
-   - Go to the **Actions** tab.
-   - Select **Fetch and build layout**.
-   - Click **Run workflow**.
-   - Input your layout ID and keyboard type (your layout must be public in Oryx), then run the workflow.
-   - (To avoid having to input values each time, you can modify the default values at the top of the `.github/workflows/fetch-and-build-layout.yml` file).
-3. A folder containing your layout will be generated at the root of the repository.
-4. You can now add your custom QMK features to this folder:
-   - Edit `config.h`, `keymap.c` and `rules.mk` according to the [QMK documentation](https://github.com/qmk/qmk_firmware/tree/master/docs/features).
-   - Commit and push to the **main** branch.
-5. You can continue editing your layout through Oryx:
-   - Make your changes in Oryx. 
-   - Optionally, add a description of your changes in the **Some notes about what you changed** field; if provided, this will be used as commit message.
-   - Confirm changes by clicking the **Compile this layout** button.
-6. To build the firmware (including both Oryx and code modifications), rerun the GitHub Action. The firmware will be available for download in the action’s artifacts.
-7. Flash your downloaded firmware using [Keymapp](https://www.zsa.io/flash#flash-keymap).
-8. Enjoy!
+- moves the Moonlander's lower pinky columns up a row,
+- renames keycodes that upstream QMK has renamed,
+- drops keys outside the 34, listing them as it goes,
+- turns RGB keys into `KC_NO`, since the Ferris has no LEDs.
 
-## Halcyon Ferris mirror
+## Changing the layout
 
-`ferris/` holds a keymap for the splitkb Halcyon Ferris rev1 (3x5+2) generated from the Moonlander layout, which only uses 34 keys. The Moonlander's pinky columns sit one row lower; the generator moves them back up so every finger has a plain 3-row column.
+1. Edit the layout in Oryx and click **Compile this layout**. Anything you type in **Some notes about what you changed** becomes the commit message.
+2. Run **Fetch and build layout** from the Actions tab.
+3. `git pull` to get the merge and the regenerated Ferris files.
 
-- `ferris/generate.py` rewrites `ferris/keymap.c`, `config.h` and `i18n.h` from `RgoVP/`. CI runs it and commits the result back to `main` whenever it changes, so after an Oryx sync just `git pull`; don't edit the generated files. `ferris/rules.mk` is hand-maintained.
-- The **Build Ferris layout** workflow regenerates the keymap and builds it against upstream QMK. It runs after **Fetch and build layout**, on pushes touching `RgoVP/` or `ferris/`, or manually. Flash the `.uf2` by double-tapping the reset button and copying it onto the RPI-RP2 drive (once per half).
-- The same workflow redraws `docs/keymap.svg` (Moonlander) and `docs/ferris-keymap.svg` and commits them when they change. Locally, `nix run` does the same drawing (`keymap-viz/draw.sh`).
-- Keys outside the 34 (e.g. the top row of layer 6) are dropped; the generator lists them. The Ferris has no LEDs, so RGB keys become `KC_NO` and RGB matrix is disabled in `ferris/rules.mk`.
+For QMK features Oryx can't do, edit `RgoVP/config.h`, `keymap.c` or `rules.mk` on `main` and push. Keep hand-written code out of the parts Oryx regenerates (the keymap array, combos, `DUAL_FUNC_*`), or the next Oryx merge will conflict. Mirror new `rules.mk` features in `ferris/rules.mk`.
 
-## Oryx Chrome extension
+## Flashing
 
-To make building even easier, [@nivekmai](https://github.com/nivekmai) created an [Oryx Chrome extension](https://chromewebstore.google.com/detail/oryx-extension/bocjciklgnhkejkdfilcikhjfbmbcjal) to be able to trigger the GitHub Actions from inside Oryx itself.
+Download the firmware from the workflow run's artifacts.
+
+**Moonlander** (`zsa_moonlander_reva_RgoVP.bin`, from *Fetch and build layout*): flash with [Keymapp](https://www.zsa.io/flash#flash-keymap).
+
+**Ferris** (`splitkb_halcyon_ferris_rev1_mirror.uf2`): each half is flashed separately with the same file. No flashing tool is needed:
+
+1. Plug the half you want to flash into the computer with a data-capable USB cable. The cable between the halves can stay connected.
+2. Double-tap that half's reset button. It shows up as a USB drive called `RPI-RP2`.
+3. Copy the `.uf2` onto the drive. The half reboots by itself once the copy finishes.
+4. Repeat for the other half.
+
+## Drawing the keymap locally
+
+```sh
+nix run    # regenerates ferris/ and redraws docs/keymap.svg + docs/ferris-keymap.svg
+```
+
+## Credits
+
+Workflow and template by [Pierre Poulain](https://github.com/poulainpi/oryx-with-custom-qmk) (MIT, see `LICENSE.md`). The [Oryx Chrome extension](https://chromewebstore.google.com/detail/oryx-extension/bocjciklgnhkejkdfilcikhjfbmbcjal) by [@nivekmai](https://github.com/nivekmai) can trigger the workflows from inside Oryx.
