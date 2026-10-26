@@ -1140,7 +1140,7 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(308, 98)" class="key sym keypos-19">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">+</text>
+<text x="0" y="0" class="key sym tap">&#x27;</text>
 </g>
 <g transform="translate(364, 98)" class="key trans keypos-20">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
@@ -1159,7 +1159,7 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(756, 84)" class="key sym keypos-24">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">,</text>
+<text x="0" y="0" class="key sym tap">+</text>
 </g>
 <g transform="translate(812, 91)" class="key sym keypos-25">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
@@ -1179,7 +1179,7 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(84, 161)" class="key sym keypos-29">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
-<text x="0" y="0" class="key sym tap">&#x27;</text>
+<text x="0" y="0" class="key sym tap">.</text>
 </g>
 <g transform="translate(140, 147)" class="key mod keypos-30">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key mod"/>
@@ -1218,7 +1218,7 @@ rect.combo { fill: #cfe3ff; }
 </g>
 <g transform="translate(756, 140)" class="key mod keypos-38">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key mod"/>
-<text x="0" y="0" class="key mod tap">.</text>
+<text x="0" y="0" class="key mod tap">,</text>
 <text x="0" y="24" class="key mod hold">RCtl</text>
 </g>
 <g transform="translate(812, 147)" class="key sym keypos-39">
@@ -1453,9 +1453,9 @@ rect.combo { fill: #cfe3ff; }
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
 <text x="0" y="0" class="key sym tap">&lt;</text>
 </g>
-<g transform="translate(756, 84)" class="key trans keypos-24">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
-<text x="0" y="0" class="key trans tap">▽</text>
+<g transform="translate(756, 84)" class="key sym keypos-24">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
+<text x="0" y="0" class="key sym tap">+</text>
 </g>
 <g transform="translate(812, 91)" class="key sym keypos-25">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key sym"/>
