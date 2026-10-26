@@ -11,6 +11,11 @@
 // conflicts); KC_F13 is a placeholder, the tap is intercepted in process_record_user.
 #define REP_L2 LT(2, KC_F13)
 
+// Dead-key memory for Repeat: after AltGr+~ then o (= õ), Repeat replays the dead
+// key before the o, so it types õ again instead of a plain o.
+static uint16_t pending_dead = KC_NO;  // dead key just typed, waiting for its letter
+static uint16_t repeat_dead  = KC_NO;  // dead key to replay before the remembered key
+
 enum custom_keycodes {
   RGB_SLD = ZSA_SAFE_RANGE,
 };
@@ -271,6 +276,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
     case REP_L2:
       if (record->tap.count > 0) {          // tapped -> Repeat Key
+        if (record->event.pressed) {
+          // A repeated dead key consumes the pending one (dead + dead = literal ~),
+          // so the next letter doesn't follow a dead key.
+          pending_dead = KC_NO;
+          if (repeat_dead != KC_NO) {
+            add_weak_mods(MOD_BIT(KC_RALT));  // AltGr + dead key first
+            tap_code16(repeat_dead);
+            del_weak_mods(MOD_BIT(KC_RALT));
+            send_keyboard_report();
+          }
+        }
         repeat_key_invoke(&record->event);
         return false;
       }
@@ -287,6 +303,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
+// What a key sends when pressed with AltGr as a dead key, or KC_NO if it isn't one.
+static uint16_t dead_key_code(uint16_t keycode) {
+  switch (keycode) {
+    case DUAL_FUNC_7:      return KC_TILD;  // ~ on layer 4
+    case KC_TILD:          return KC_TILD;
+    case KC_GRAVE:         return KC_GRAVE;
+    case KC_QUOTE:
+    case MT(MOD_RALT, KC_QUOTE): return KC_QUOTE;
+    case KC_DQUO:          return KC_DQUO;
+    case KC_CIRC:          return KC_CIRC;
+  }
+  return KC_NO;
+}
+
 // Don't let Repeat Key remember REP_L2 itself as the "last key" — otherwise
 // tapping it would repeat itself (i.e. do nothing) instead of the previous key.
 bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *remembered_mods) {
@@ -294,5 +324,9 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *reme
     case REP_L2:
       return false;
   }
+  // Not called for keys Repeat itself replays, so repeat_dead survives repeated taps.
+  uint16_t dead = (*remembered_mods & MOD_BIT(KC_RALT)) ? dead_key_code(keycode) : KC_NO;
+  repeat_dead  = dead ? KC_NO : pending_dead;
+  pending_dead = dead;
   return true;
 }
