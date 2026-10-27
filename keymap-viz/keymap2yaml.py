@@ -271,17 +271,17 @@ def classify(tok):
     return classify_scalar(tok)
 
 
-# category -> fill colour
+# category -> fill colour (dark tints; keymap-drawer's dark text is #d1d6db)
 PALETTE = {
-    "alpha": "#eef1f5",
-    "num":   "#fff2cc",
-    "sym":   "#e7d9f6",
-    "mod":   "#ffdede",
-    "layer": "#d9edd9",
-    "nav":   "#d3eef6",
-    "sys":   "#ffe3c7",
-    "func":  "#e1e8ef",
-    "trans": "#fbfcfd",
+    "alpha": "#3f4750",
+    "num":   "#5a4c1e",
+    "sym":   "#4b3a63",
+    "mod":   "#6b3535",
+    "layer": "#2f5236",
+    "nav":   "#1f4f5c",
+    "sys":   "#6a4320",
+    "func":  "#384350",
+    "trans": "#22272e",
 }
 
 
@@ -289,8 +289,8 @@ def draw_config_block():
     css = ["/* per-category key colours */"]
     for cls, fill in PALETTE.items():
         css.append("rect.%s { fill: %s; }" % (cls, fill))
-    css.append("rect.combo { fill: #cfe3ff; }")
-    out = ["draw_config:", "  svg_extra_style: |"]
+    css.append("rect.combo { fill: #1f3d7a; }")
+    out = ["draw_config:", "  dark_mode: true", "  svg_extra_style: |"]
     out += ["    " + line for line in css]
     return out
 
